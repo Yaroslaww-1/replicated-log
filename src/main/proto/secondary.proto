@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "edu.ucu";
+option java_outer_classname = "Secondary";
+option objc_class_prefix = "HLW";
+
+package edu.ucu;
+
+service SecondaryService {
+  rpc send (SecondaryRequest) returns (SecondaryReply) {}
+}
+
+message SecondaryRequest {
+  string name = 1;
+}
+
+message SecondaryReply {
+  string message = 1;
+}
