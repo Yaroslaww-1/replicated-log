@@ -1,3 +1,8 @@
 micronaut:
   application:
     name: secondary
+grpc:
+  server:
+    port: 8000
+    keep-alive-time: 3h
+    max-inbound-message-size: 1024
