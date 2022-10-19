@@ -1,0 +1,13 @@
+name: replicated_log_secondary
+
+services:
+  api:
+    container_name: replicated_log_secondary_api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - 8000:8000
+#    environment:
+#      DELAY: '1s'
