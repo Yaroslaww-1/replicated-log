@@ -18,7 +18,6 @@ class MessageController(
     private val createMessageCommandHandler: CreateMessageCommandHandler,
     private val getAllMessagesQueryHandler: GetAllMessagesQueryHandler
 ): MessageReplicationGrpcKt.MessageReplicationCoroutineImplBase() {
-
     override suspend fun appendMessage(request: AppendMessageRequest): AppendMessageReply {
         createMessageCommandHandler.execute(CreateMessageCommand(
             request.id,

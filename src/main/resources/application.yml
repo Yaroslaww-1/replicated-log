@@ -1,6 +1,10 @@
 micronaut:
   application:
     name: secondary
+delay:
+  enabled: true
+  min: 2s
+  max: 5s
 grpc:
   server:
     port: 8000
