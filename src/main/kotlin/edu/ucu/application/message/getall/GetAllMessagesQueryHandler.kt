@@ -14,8 +14,7 @@ class GetAllMessagesQueryHandler(
             messages.map { m -> GetAllMessagesResponse.GetAllMessagesResponseItem(
                 m.id(),
                 m.messageText(),
-                m.receivedAt(),
-                m.replicatedAt()) }
+                m.createdAt()) }
         )
     }
 }

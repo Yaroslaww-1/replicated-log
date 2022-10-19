@@ -5,5 +5,5 @@ import java.time.LocalDateTime
 data class CreateMessageCommand(
     val id: Long,
     val messageText: String,
-    val receivedAt: LocalDateTime
+    val createdAt: LocalDateTime
 ) {}

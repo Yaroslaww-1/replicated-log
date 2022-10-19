@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+package ReplicatedLogGrcp;
+
+// Common types
+message Message {
+  int64 id = 1;
+  string message_text = 2;
+  google.protobuf.Timestamp created_at = 3;
+}
+
+// Service
+service MessageReplication {
+  rpc AppendMessage (AppendMessageRequest) returns (AppendMessageReply) {}
+  rpc GetAllMessages (google.protobuf.Empty) returns (GetAllMessagesReply) {}
+}
+
+message AppendMessageRequest {
+  int64 id = 1;
+  string message_text = 2;
+  google.protobuf.Timestamp created_at = 3;
+}
+
+message AppendMessageReply {
+  bool success = 1;
+  string response_text = 2;
+}
+
+message GetAllMessagesReply {
+  bool success = 1;
+  string response_text = 2;
+  repeated Message items = 3;
+}

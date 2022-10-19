@@ -1,4 +1,4 @@
-package edu.ucu
+package edu.ucu.api
 
 import io.micronaut.runtime.Micronaut.*
 

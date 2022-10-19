@@ -1,11 +1,9 @@
 package edu.ucu.api.controllers.message
 
+import ReplicatedLogGrcp.MessageOuterClass.*
+import ReplicatedLogGrcp.MessageReplicationGrpcKt
 import com.google.protobuf.Empty
 import com.google.protobuf.util.Timestamps
-import edu.ucu.CreateMessageRequest
-import edu.ucu.GetAllMessagesReply
-import edu.ucu.Message
-import edu.ucu.SecondaryServiceGrpcKt
 import edu.ucu.application.message.create.CreateMessageCommand
 import edu.ucu.application.message.create.CreateMessageCommandHandler
 import edu.ucu.application.message.getall.GetAllMessagesQuery
@@ -19,26 +17,32 @@ import java.time.ZoneOffset
 class MessageController(
     private val createMessageCommandHandler: CreateMessageCommandHandler,
     private val getAllMessagesQueryHandler: GetAllMessagesQueryHandler
-): SecondaryServiceGrpcKt.SecondaryServiceCoroutineImplBase() {
+): MessageReplicationGrpcKt.MessageReplicationCoroutineImplBase() {
 
-    override suspend fun createMessage(request: CreateMessageRequest): Empty {
+    override suspend fun appendMessage(request: AppendMessageRequest): AppendMessageReply {
         createMessageCommandHandler.execute(CreateMessageCommand(
             request.id,
             request.messageText,
-            LocalDateTime.ofEpochSecond(request.receivedAt.seconds, request.receivedAt.nanos, ZoneOffset.UTC)
+            LocalDateTime.ofEpochSecond(request.createdAt.seconds, request.createdAt.nanos, ZoneOffset.UTC)
         ))
-        return Empty.getDefaultInstance()
+        return AppendMessageReply.newBuilder()
+            .setSuccess(true)
+            .setResponseText("Replicated successfully")
+            .build()
     }
 
     override suspend fun getAllMessages(request: Empty): GetAllMessagesReply {
         val messages = getAllMessagesQueryHandler.execute(GetAllMessagesQuery())
-        return GetAllMessagesReply.newBuilder().addAllItems(messages.items.map { m ->
-            Message.newBuilder()
-                .setId(m.id)
-                .setMessageText(m.messageText)
-                .setReceivedAt(Timestamps.fromNanos(m.receivedAt.nano.toLong()))
-                .setReplicatedAt(Timestamps.fromNanos(m.replicatedAt.nano.toLong()))
-                .build()
-        }).build()
+        return GetAllMessagesReply.newBuilder()
+            .addAllItems(messages.items.map { m ->
+                Message.newBuilder()
+                    .setId(m.id)
+                    .setMessageText(m.messageText)
+                    .setCreatedAt(Timestamps.fromNanos(m.createdAt.nano.toLong()))
+                    .build()
+            })
+            .setSuccess(true)
+            .setResponseText("Replicated messages")
+            .build()
     }
 }

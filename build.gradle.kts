@@ -43,7 +43,7 @@ dependencies {
 
 
 application {
-    mainClass.set("edu.ucu.ApplicationKt")
+    mainClass.set("edu.ucu.api.ApplicationKt")
 }
 
 java {

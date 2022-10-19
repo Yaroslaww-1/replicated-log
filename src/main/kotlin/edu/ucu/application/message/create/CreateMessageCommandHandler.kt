@@ -9,7 +9,7 @@ class CreateMessageCommandHandler(
     private val messageRepository: MessageRepository
 ) {
     fun execute(command: CreateMessageCommand): Unit {
-        val message = Message.create(command.id, command.messageText, command.receivedAt)
+        val message = Message.create(command.id, command.messageText, command.createdAt)
         messageRepository.add(message)
     }
 }
